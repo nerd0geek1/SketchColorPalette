@@ -1,0 +1,17 @@
+{
+  "name": "Sketch Color Palette",
+  "description": "A Sketch Plugin to generate .clr(Color Palette) file from selected layers.",
+  "author": "Kohei Tabata",
+  "authorEmail": "nerd0geek1@gmail.com",
+  "homepage": "https://github.com/nerd0geek1/SketchColorPalette",
+  "version": "1.0.0",
+  "identifier": "com.nerd0geek1.sketch.SketchColorPalette",
+  "compatibleVersion": 42,
+  "commands": [
+    {
+      "name": "export .clr file",
+      "script": "export.cocoascript",
+      "identifier": "export.clr.file"
+    }
+  ]
+}
