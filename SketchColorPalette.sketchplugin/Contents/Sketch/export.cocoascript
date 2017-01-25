@@ -1,0 +1,46 @@
+// Sketch Plugin: SketchColorPalette
+// Source: https://github.com/nerd0geek1/SketchColorPalette
+
+function onRun(context) {
+  var selection = context.selection;
+  var colorList = [[NSColorList alloc] init];
+  for (i = 0; i < selection.length; i++) {
+    let object = selection[i];
+    if ([object isKindOfClass:[MSShapeGroup class]]) {
+      let name  = [object name];
+      if (![colorList colorWithKey:name]) {
+        let color = fillColorFromShape(object);
+        [colorList setColor:color forKey:name];
+      } else {
+        let errorMessage = [[NSString alloc] initWithFormat:"Same name colors are found!\nRedundant color name: %@", name];
+        let alert = [[NSAlert alloc] init];
+        [alert setMessageText: errorMessage];
+        [alert runModal];
+        break;
+      }
+    }
+  }
+
+  if (selection.length == [[colorList allKeys] count]) {
+    showSavePanelWithColorList(colorList)
+  }
+}
+
+function fillColorFromShape(shape) {
+  let fill  = shape.style().fills().firstObject();
+  var red   = fill.color().red().toFixed(3).toString();
+  var green = fill.color().green().toFixed(3).toString();
+  var blue  = fill.color().blue().toFixed(3).toString();
+  var alpha = fill.color().alpha().toFixed(3).toString();
+
+  var color = [NSColor colorWithRed:red green:green blue:blue alpha:alpha];
+  return color
+}
+
+function showSavePanelWithColorList(colorList) {
+  var savePanel = [NSSavePanel savePanel];
+  [savePanel setNameFieldStringValue:"Color Palette.clr"];
+  if ([savePanel runModal] == NSFileHandlingPanelOKButton) {
+    [colorList writeToFile:[[savePanel URL] path]];
+  }
+}
